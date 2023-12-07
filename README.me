@@ -1,0 +1,11 @@
+# Hardened Nginx + PHP docker-compose.yaml
+
+This should serve as a basis with sane defaults.
+**Customize to your heart's contempt.**
+
+# Security disclaimer
+
+You **must** generate a new dhparam and certificates. 
+
+Default ones in `certs/` are only provided for convenience and quickly get a working local environment.
+You can even regenerate temporary ones by uncommenting the `cert-generator` section in `docker-compose.yml` 
