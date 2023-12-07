@@ -1,22 +1,29 @@
 version: '3.9'
 
+networks:
+  internal:
+    driver: bridge
+
 services:
 
   nginx:
+
     image: nginx:latest
     restart: unless-stopped
     cpu_shares: 512
     mem_limit: 256M
     mem_reservation: 128M
     healthcheck:
-      test: ["CMD", "curl", "-A", "Docker", "-f", "http://localhost:80"]
+      test: ["CMD", "service", "nginx", "status"]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 5s
     ports:
       - '8080:80'
       - '8443:443'
+    networks:
+      - internal
     volumes:
       - ./www:/var/www
       - ./tmp:/tmp
@@ -26,17 +33,20 @@ services:
       - ./certs:/etc/nginx/certs
       
   php-fpm:
-    image: php:8.3-fpm
+    build: .
+    #image: php:8.3-fpm
     restart: unless-stopped
     cpu_shares: 512
     mem_limit: 512M
     mem_reservation: 256M
     healthcheck:
-      test: ["CMD", "curl", "-A", "Docker", "-f", "http://localhost:9000/php/fpm/ping"]
+      test: ["CMD", "curl", "-A", "Docker", "-f", "http://nginx/health/php"]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 5s
+    networks:
+      - internal
     volumes:
       - ./www:/var/www
       - ./tmp:/tmp

@@ -38,7 +38,7 @@ php_admin_flag[log_errors] = on
 
 The following settings are **soft-set** and **can** be changed by your PHP application using `ini_set`.
 
-Please be mindful of the implies security risks. 
+Please be mindful of the implied security risks. 
 
 ```ini
 upload_max_filesize = 2M
